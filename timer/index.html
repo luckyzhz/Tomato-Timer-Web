@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>番茄计时器</title>
+  <link rel="icon" href="image/tomato.svg">
+
+  <link rel="stylesheet" href="timer.css">
+  <script src="timer.js" defer></script>
+</head>
+
+<body>
+
+  <!-- 控制部分 -->
+  <div id="control">  <!-- 会利用 ::after 伪元素实现固定宽高比 -->
+    <div class="parameter">
+      <div>分钟</div>
+      <input id="parameter-minute" type="number" value="25">
+
+      <div>秒钟</div>
+      <input id="parameter-minute" type="number" value="00">
+
+      <div>休息</div>
+      <input id="parameter-minute" type="number" value="05">
+
+      <button id="start" type="button">开始<img src="image/icon/icon-play.svg"></button>
+      <button id="reset" type="button">重置<img src="image/icon/icon-reset.svg"></button>
+      <button id="fullscreen" type="button">全屏<img src="image/icon/icon-fullscreen.svg"></button>
+    </div>
+  </div>
+
+  <!-- 计数板部分 -->
+  <div id="timer">  <!-- 会利用 ::after 伪元素实现固定宽高比 -->
+    <div id="score-board">
+      <div id="minute">
+        <div class="upper"><img src="image/计数板数字.svg"></div>
+        <div class="lower"><img src="image/计数板数字.svg"></div>
+      </div>
+      <div id="second">
+        <div class="upper"><img src="image/计数板数字.svg"></div>
+        <div class="lower"><img src="image/计数板数字.svg"></div>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>

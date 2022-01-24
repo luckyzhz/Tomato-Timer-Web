@@ -1,0 +1,155 @@
+/* ------------ 网页整体设置 ------------ */
+
+/* 首先把盒模型设为 border-box，避免溢出。
+另外也设置动画过渡时长，使动画速度统一 */
+html {
+  box-sizing: border-box;
+  transition: all 0.5s;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+  transition: inherit;
+}
+
+body {
+  /* margin 设为 0，从而可以让背景色铺满整个网页 */
+  margin: 0;
+  height: 100vh;
+  background: #bababa;
+  color: #bababa;
+  font-family: '黑体', sans-serif;
+  line-height: 1.5;
+  text-align: center;
+  /* 弹性盒子布局 */
+  display: flex;
+  /* 水平等距分布 */
+  justify-content: space-evenly;
+  /* 行内垂直对齐 */
+  align-items: center;
+}
+
+/* ------------ 控制部分 ------------ */
+
+#control {
+  position: relative;
+  /* background-color: blue; */
+  width: 20%;
+  font-size: 1.5rem;
+}
+
+/* 利用 margin-top 属性，实现盒子特定的宽高比 */
+#control::after {
+  content: "";
+  display: block;
+  margin-top: calc(270 / 160 * 100%);
+}
+
+.parameter {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: space-between;
+  /* 因为父容器利用伪元素撑起盒子，实现特定宽高比，所以这里要设为绝对定位，
+  让其脱离正常文档流，也就是浮在那个撑起盒子高度的伪元素上面 */
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+/* 参数名 */
+.parameter>div:nth-child(2n+1) {
+  width: 50%;
+  border-radius: 0.5rem 0 0 0.5rem;
+  background-color: black;
+  border-right: solid 1px #bababa;
+}
+
+/* 参数值 */
+.parameter>input:nth-child(2n+2), .parameter > button {
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: none;
+  width: 50%;
+  border-radius: 0 0.5rem 0.5rem 0;
+  background-color: black;
+  /* 字体部分 */
+  font-size: inherit;
+  line-height: inherit;
+  text-align: inherit;
+  color: inherit;
+}
+
+/* 按钮 */
+.parameter > button {
+  width: 100%;
+  border-radius: 0.5rem;
+  background-color: #60c250;
+  color: white;
+
+}
+
+button img {
+  width: 1.5rem;
+  vertical-align: middle;
+  margin-left: 1rem;
+}
+
+/* ------------ 计时器 ------------ */
+
+#timer {
+  position: relative;
+  width: 60%;
+  background-color: black;
+  border-radius: 0.5rem;
+}
+
+/* 利用 margin-top 属性，实现盒子特定的宽高比 */
+#timer::after {
+  content: "";
+  display: block;
+  margin-top: calc(270 / 480 * 100%);
+}
+
+#score-board {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* 因为父容器利用伪元素撑起盒子，实现特定宽高比，所以这里要设为绝对定位，
+  让其脱离正常文档流，也就是浮在那个撑起盒子高度的伪元素上面 */
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+#minute, #second {
+  width: calc(200 / 480 * 100%);
+  height: calc(200 / 270 * 100%);
+  margin: calc(5 / 480 * 100%);
+}
+
+.upper, .lower {
+  width: 100%;
+  height: 50%;
+  background-color: #212121;
+  position: relative;
+  overflow: hidden;
+}
+
+.upper {
+  border-bottom: solid black 0.25rem;
+  border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.lower {
+  border-top: solid black 0.25rem;
+  border-radius: 0 0 0.5rem 0.5rem;
+}
+
+.lower img {
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: auto;
+  bottom: 0;
+}

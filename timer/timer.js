@@ -1,0 +1,20 @@
+secondUpperImg = document.querySelector("#second>.upper>img")
+
+xml = `
+<svg id="图层_1" data-name="图层 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 566.93 566.93">
+  <defs>
+    <style>
+      .cls-1 {
+        font-size: 566.93px;
+        fill: #bababa;
+        font-family: Arial-BoldMT, Arial, sans-serif;
+        font-weight: 700;
+      }
+    </style>
+  </defs>
+  <title>未标题-2</title><text class="cls-1" transform="translate(125.82 486.37) scale(0.5 1)">00</text>
+</svg>`
+
+xml = window.btoa(unescape(encodeURIComponent( xml )));
+
+secondUpperImg.src = "data:image/svg+xml;base64," + xml;
