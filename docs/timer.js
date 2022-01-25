@@ -21,14 +21,14 @@ let minuteUpperAnimate = minuteUpper.cloneNode(true);
 minuteBox.appendChild(minuteUpperAnimate);
 
 let minuteLowerAnimate = minuteLower.cloneNode(true);
-// minuteLowerAnimate.classList.add("middle");   // 翻到 90°，等待动画
+minuteLowerAnimate.classList.add("middle");   // 翻到 90°，等待动画
 minuteBox.appendChild(minuteLowerAnimate);
 
 let secondUpperAnimate = secondUpper.cloneNode(true);
 secondBox.appendChild(secondUpperAnimate);
 
 let secondLowerAnimate = secondLower.cloneNode(true);
-// secondLowerAnimate.classList.add("middle");   // 翻到 90°，等待动画
+secondLowerAnimate.classList.add("middle");   // 翻到 90°，等待动画
 secondBox.appendChild(secondLowerAnimate);
 
 // 获取按钮
@@ -102,42 +102,49 @@ function flip(upper, upperAnimate, lower, lowerAnimate, currentValue) {
     setImgNumber(upperAnimate.firstChild, nextValue); // 上部动态牌子动画结束时，会回复原位，所以要设置为下一个值
     upperAnimate.classList.remove("upper-animate");   // 移除类名，为下一次动画做准备
     setImgNumber(lowerAnimate.firstChild, nextValue); // 下部动态牌子动之前，先设为下一个值
-    lowerAnimate.classList.add("middle");
+    // lowerAnimate.classList.add("middle");
     lowerAnimate.classList.add("lower-animate");      // 触发下部动画
   }, false);
 
   // 下部动画结束时，要触发的操作
   lowerAnimate.addEventListener("animationend", function () {
-    // setImgNumber(lower.firstChild, nextValue);        // 下部静态牌子设为下一个值，为下一次动画做准备
+    setImgNumber(lower.firstChild, nextValue);        // 下部静态牌子设为下一个值，为下一次动画做准备
     lowerAnimate.classList.remove("lower-animate");   // 移除类名，为下一次动画做准备
-    lowerAnimate.classList.remove("middle");
+    // lowerAnimate.classList.remove("middle");
   }, false);
 }
 
 function updateTimer() {
-  if (minute > 0) {
-    flip(secondUpper, secondUpperAnimate, secondLower, secondLowerAnimate, second);
-    if (second > 0) {
-      second--;
-    } else {
-      second = 59;
+  let totalSeconds = 60 * minute + second;
+  let start = Date.now();
+  let oldMinute = minute;
+  let oldSecond = second;
+
+  setInterval(function () {
+    let duration = Date.now() - start;
+    let leftSeconds = totalSeconds - Math.floor(duration / 1000);
+    let newMinute = Math.floor(leftSeconds / 60);
+    let newSecond = leftSeconds % 60;
+
+    if (leftSeconds > 0) {
+      if (newMinute !== oldMinute) {
+        flip(minuteUpper, minuteUpperAnimate, minuteLower, minuteLowerAnimate, oldMinute);
+        oldMinute = newMinute;
+      }
+      if (newSecond !== oldSecond) {
+        flip(secondUpper, secondUpperAnimate, secondLower, secondLowerAnimate, oldSecond);
+        oldSecond = newSecond;
+      }
     }
-    if (second === 59) {
-      flip(minuteUpper, minuteUpperAnimate, minuteLower, minuteLowerAnimate, minute);
-      minute--;
-    }
-  } else if (minute === 0 && second > 0) {
-    flip(secondUpper, secondUpperAnimate, secondLower, secondLowerAnimate, second);
-    second--;
-  }
+  }, 1000);
 }
 
 /* --------------- 主程序 --------------- */
 
 // 初始化
 initialize();
-// updateTimer();
-setInterval(updateTimer, 1000);
+updateTimer();
+// setInterval(updateTimer, 1000);
 
 
 // flip(minuteUpper, minuteUpperAnimate, minuteLower, minuteLowerAnimate, 25);

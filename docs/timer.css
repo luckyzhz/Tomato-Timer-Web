@@ -1,15 +1,12 @@
 /* ------------ 网页整体设置 ------------ */
 
-/* 首先把盒模型设为 border-box，避免溢出。
-另外也设置动画过渡时长，使动画速度统一 */
+/* 首先把盒模型设为 border-box，避免溢出。 */
 html {
   box-sizing: border-box;
-  /* transition: all 0.5s; */
 }
 
 *, *::before, *::after {
   box-sizing: inherit;
-  /* transition: inherit; */
 }
 
 body {
@@ -172,7 +169,7 @@ button img {
 /* 上部牌子从上部翻到中间的动画 */
 .upper-animate {
   /* 动画时间 */
-  animation-duration: 0.5s;
+  animation-duration: 0.3s;
   /* 动画名（后面需要自定义这个动画名的动作） */
   animation-name: upper-to-middle;
   /* 转动轴 */
@@ -196,7 +193,7 @@ button img {
 /* 下部牌子从中间翻到下部的动画 */
 .lower-animate {
   /* 动画时间 */
-  animation-duration: 0.5s;
+  animation-duration: 0.3s;
   /* 动画名（后面需要自定义这个动画名的动作） */
   animation-name: middle-to-lower;
   /* 转动轴 */
