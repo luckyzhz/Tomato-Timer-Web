@@ -4,12 +4,12 @@
 另外也设置动画过渡时长，使动画速度统一 */
 html {
   box-sizing: border-box;
-  transition: all 0.5s;
+  /* transition: all 0.5s; */
 }
 
 *, *::before, *::after {
   box-sizing: inherit;
-  transition: inherit;
+  /* transition: inherit; */
 }
 
 body {
@@ -141,13 +141,13 @@ button img {
 
 .upper {
   top: 0;
-  border-bottom: solid black 0.25rem;
+  border-bottom: solid black 0.2rem;
   border-radius: 0.5rem 0.5rem 0 0;
 }
 
 .lower {
   bottom: 0;
-  border-top: solid black 0.25rem;
+  border-top: solid black 0.2rem;
   border-radius: 0 0 0.5rem 0.5rem;
 }
 
@@ -171,12 +171,14 @@ button img {
 
 /* 上部牌子从上部翻到中间的动画 */
 .upper-animate {
-    /* 动画时间 */
+  /* 动画时间 */
   animation-duration: 0.5s;
   /* 动画名（后面需要自定义这个动画名的动作） */
   animation-name: upper-to-middle;
   /* 转动轴 */
   transform-origin: bottom;
+  /* 匀速动画 */
+  animation-timing-function: linear;
   /* 排列在其他元素之上 */
   z-index: 1;
 }
@@ -193,16 +195,16 @@ button img {
 
 /* 下部牌子从中间翻到下部的动画 */
 .lower-animate {
-    /* 动画时间 */
+  /* 动画时间 */
   animation-duration: 0.5s;
   /* 动画名（后面需要自定义这个动画名的动作） */
   animation-name: middle-to-lower;
   /* 转动轴 */
   transform-origin: top;
+  /* 匀速动画 */
+  animation-timing-function: linear;
   /* 排列在其他元素之上 */
   z-index: 1;
-  /* 初始位置翻在中间 */
-  transform: rotateX(-90deg);
 }
 
 @keyframes middle-to-lower {
@@ -213,4 +215,11 @@ button img {
   to {
     transform: rotateX(0deg);
   }
+}
+
+/* 下部动态牌子的初始位置 */
+.middle {
+  /* 转动轴 */
+  transform-origin: top;
+  transform: rotateX(-90deg);
 }
