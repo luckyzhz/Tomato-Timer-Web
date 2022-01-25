@@ -122,12 +122,14 @@ button img {
   height: 100%;
 }
 
+/* 分钟框，秒钟框，设为正方形 */
 #minute, #second {
   width: calc(200 / 480 * 100%);
   height: calc(200 / 270 * 100%);
   margin: calc(5 / 480 * 100%);
 }
 
+/* 上部、下部计数板，各占据半个正方形 */
 .upper, .lower {
   width: 100%;
   height: 50%;
@@ -146,10 +148,57 @@ button img {
   border-radius: 0 0 0.5rem 0.5rem;
 }
 
-.lower img {
+/* 数字 svg 图的尺寸与定位 */
+.upper img, .lower img {
   display: block;
   position: absolute;
   width: 100%;
   height: auto;
+}
+
+.upper img {
+  top: 0;
+}
+
+.lower img {
   bottom: 0;
+}
+
+/* ------------ 动画 ------------ */
+
+/* 上部牌子从上部翻到中间的动画 */
+.upper-animate {
+  animation-duration: 0.5s;   /* 动画时间 */
+  animation-name: upper-to-middle;    /* 动画名（后面需要自定义这个动画名的动作） */
+  transform-origin: bottom;   /* 转动轴 */
+  z-index: 1;   /* 排列在其他元素之上 */
+}
+
+@keyframes upper-to-middle {
+  from {
+    transform: rotateX(0deg);
+  }
+
+  to {
+    transform: rotateX(90deg);
+  }
+}
+
+/* 下部牌子从中间翻到下部的动画 */
+.lower-animate {
+  animation-duration: 0.5s;   /* 动画时间 */
+  animation-name: middle-to-lower;    /* 动画名（后面需要自定义这个动画名的动作） */
+  transform-origin: top;   /* 转动轴 */
+  z-index: 1;   /* 排列在其他元素之上 */
+  transform: rotateX(-90deg);
+}
+
+@keyframes middle-to-lower {
+  from {
+    transform: rotateX(-90deg);
+  }
+
+  to {
+    transform: rotateX(0deg);
+  }
 }
