@@ -117,8 +117,6 @@ function flip(upper, upperAnimate, lower, lowerAnimate, currentValue) {
 function updateTimer() {
   let totalSeconds = 60 * minute + second;
   let start = Date.now();
-  let oldMinute = minute;
-  let oldSecond = second;
 
   setInterval(function () {
     let duration = Date.now() - start;
@@ -127,13 +125,13 @@ function updateTimer() {
     let newSecond = leftSeconds % 60;
 
     if (leftSeconds > 0) {
-      if (newMinute !== oldMinute) {
-        flip(minuteUpper, minuteUpperAnimate, minuteLower, minuteLowerAnimate, oldMinute);
-        oldMinute = newMinute;
+      if (newMinute !== minute) {
+        flip(minuteUpper, minuteUpperAnimate, minuteLower, minuteLowerAnimate, minute);
+        minute = newMinute;
       }
-      if (newSecond !== oldSecond) {
-        flip(secondUpper, secondUpperAnimate, secondLower, secondLowerAnimate, oldSecond);
-        oldSecond = newSecond;
+      if (newSecond !== second) {
+        flip(secondUpper, secondUpperAnimate, secondLower, secondLowerAnimate, second);
+        second = newSecond;
       }
     }
   }, 1000);
