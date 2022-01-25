@@ -65,7 +65,7 @@ body {
 }
 
 /* 参数值 */
-.parameter>input:nth-child(2n+2), .parameter > button {
+.parameter>input:nth-child(2n+2), .parameter>button {
   display: block;
   margin: 0;
   padding: 0;
@@ -81,7 +81,7 @@ body {
 }
 
 /* 按钮 */
-.parameter > button {
+.parameter>button {
   width: 100%;
   border-radius: 0.5rem;
   background-color: #60c250;
@@ -168,10 +168,14 @@ button img {
 
 /* 上部牌子从上部翻到中间的动画 */
 .upper-animate {
-  animation-duration: 0.5s;   /* 动画时间 */
-  animation-name: upper-to-middle;    /* 动画名（后面需要自定义这个动画名的动作） */
-  transform-origin: bottom;   /* 转动轴 */
-  z-index: 1;   /* 排列在其他元素之上 */
+    /* 动画时间 */
+  animation-duration: 0.5s;
+  /* 动画名（后面需要自定义这个动画名的动作） */
+  animation-name: upper-to-middle;
+  /* 转动轴 */
+  transform-origin: bottom;
+  /* 排列在其他元素之上 */
+  z-index: 1;
 }
 
 @keyframes upper-to-middle {
@@ -186,10 +190,15 @@ button img {
 
 /* 下部牌子从中间翻到下部的动画 */
 .lower-animate {
-  animation-duration: 0.5s;   /* 动画时间 */
-  animation-name: middle-to-lower;    /* 动画名（后面需要自定义这个动画名的动作） */
-  transform-origin: top;   /* 转动轴 */
-  z-index: 1;   /* 排列在其他元素之上 */
+    /* 动画时间 */
+  animation-duration: 0.5s;
+  /* 动画名（后面需要自定义这个动画名的动作） */
+  animation-name: middle-to-lower;
+  /* 转动轴 */
+  transform-origin: top;
+  /* 排列在其他元素之上 */
+  z-index: 1;
+  /* 初始位置翻在中间 */
   transform: rotateX(-90deg);
 }
 
