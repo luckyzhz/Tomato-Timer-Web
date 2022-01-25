@@ -169,7 +169,7 @@ button img {
 /* 上部牌子从上部翻到中间的动画 */
 .upper-animate {
   /* 动画时间 */
-  animation-duration: 0.3s;
+  animation-duration: 0.8s;
   /* 动画名（后面需要自定义这个动画名的动作） */
   animation-name: upper-to-middle;
   /* 转动轴 */
@@ -177,7 +177,8 @@ button img {
   /* 匀速动画 */
   animation-timing-function: linear;
   /* 排列在其他元素之上 */
-  z-index: 1;
+  /* z-index: 2; */
+  backface-visibility: hidden;
 }
 
 @keyframes upper-to-middle {
@@ -186,14 +187,14 @@ button img {
   }
 
   to {
-    transform: rotateX(90deg);
+    transform: rotateX(180deg);
   }
 }
 
 /* 下部牌子从中间翻到下部的动画 */
 .lower-animate {
   /* 动画时间 */
-  animation-duration: 0.3s;
+  animation-duration: 0.8s;
   /* 动画名（后面需要自定义这个动画名的动作） */
   animation-name: middle-to-lower;
   /* 转动轴 */
@@ -201,12 +202,13 @@ button img {
   /* 匀速动画 */
   animation-timing-function: linear;
   /* 排列在其他元素之上 */
-  z-index: 1;
+  /* z-index: 1; */
+  backface-visibility: hidden;
 }
 
 @keyframes middle-to-lower {
   from {
-    transform: rotateX(-90deg);
+    transform: rotateX(-180deg);
   }
 
   to {
@@ -215,8 +217,9 @@ button img {
 }
 
 /* 下部动态牌子的初始位置 */
-.middle {
+.lower-animate-initial {
   /* 转动轴 */
   transform-origin: top;
-  transform: rotateX(-90deg);
+  transform: rotateX(-180deg);
+  z-index: 1;
 }
