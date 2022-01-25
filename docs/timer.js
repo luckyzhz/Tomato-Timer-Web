@@ -141,7 +141,8 @@ function updateTimer() {
 
 // 初始化
 initialize();
-updateTimer();
+// updateTimer();
+window.requestAnimationFrame(updateTimer);
 // setInterval(updateTimer, 1000);
 
 
