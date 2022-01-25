@@ -124,7 +124,7 @@ function updateTimer() {
     let newMinute = Math.floor(leftSeconds / 60);
     let newSecond = leftSeconds % 60;
 
-    if (leftSeconds > 0) {
+    if (leftSeconds >= 0) {
       if (newMinute !== minute) {
         flip(minuteUpper, minuteUpperAnimate, minuteLower, minuteLowerAnimate, minute);
         minute = newMinute;
