@@ -124,6 +124,7 @@ button img {
 
 /* 分钟框，秒钟框，设为正方形 */
 #minute, #second {
+  position: relative;
   width: calc(200 / 480 * 100%);
   height: calc(200 / 270 * 100%);
   margin: calc(5 / 480 * 100%);
@@ -131,19 +132,21 @@ button img {
 
 /* 上部、下部计数板，各占据半个正方形 */
 .upper, .lower {
+  position: absolute;
   width: 100%;
   height: 50%;
   background-color: #212121;
-  position: relative;
   overflow: hidden;
 }
 
 .upper {
+  top: 0;
   border-bottom: solid black 0.25rem;
   border-radius: 0.5rem 0.5rem 0 0;
 }
 
 .lower {
+  bottom: 0;
   border-top: solid black 0.25rem;
   border-radius: 0 0 0.5rem 0.5rem;
 }
