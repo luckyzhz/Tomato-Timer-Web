@@ -3,18 +3,16 @@
 /* --------------- 变量声明 --------------- */
 
 // 需要用到的全局变量
-let intervalID;     // 存放 setInterval 的返回值，以便清除定时动作
-let running = false; // 记录是否处于运行状态
-let leftSeconds = 0;  // 剩余的秒数
-let restFlag = false; // 记录是否处于休息状态
+let timeoutID;          // timeoutID，用于清除定时器
+let shouldWork = true;  // 默认处于工作状态
+let minute = 0; // 当前分钟数
+let second = 0; // 当前秒钟数
+let rest = 0;   // 休息分钟数
 
-// 获取用户设置的参数
+// 输入框
 let minuteInput = document.querySelector("#parameter-minute");
 let secondInput = document.querySelector("#parameter-second");
 let restInput = document.querySelector("#parameter-rest");
-let minute = parseInt(minuteInput.value);
-let second = parseInt(secondInput.value);
-let rest = parseInt(restInput.value);
 
 // 获取动态变化的元素
 let minuteBox = document.querySelector("#minute");
@@ -49,6 +47,19 @@ let fullScreenButton = document.querySelector("button#full-screen");
 
 /* --------------- 函数声明 --------------- */
 
+// 自动调整执行间隔的定时器
+function adjustingInterval(func, interval) {  // 传入函数和执行间隔
+  let expectedTime = Date.now() + interval; // 每次执行的期望时间戳
+  timeoutID = setTimeout(step, interval);
+  function step() {
+    let drift = Date.now() - expectedTime;  // 真正执行时与期望时间戳的漂移
+    expectedTime += interval;   // 更新期望的时间戳
+    // 调用自身，设置下一个定时任务
+    timeoutID = setTimeout(step, Math.max(0, interval - drift));
+    func();   // 真正干活的部分。func 注意放在 setTimeout 之后，因为有可能包含 clearTimeout 语句！！！
+  }
+}
+
 // 字符串转 base64 的函数
 function b64EncodeUnicode(str) {
   return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (match, p1) {
@@ -76,26 +87,32 @@ function setImgNumber(img, number) {
   img.src = "data:image/svg+xml;base64," + svgBase64;
 }
 
-// 用用户设置的值初始化计时器
+// 设置面板数字
+function setBoard(minute, second) {
+  // 分钟面版
+  setImgNumber(minuteUpper.firstChild, minute);
+  setImgNumber(minuteLower.firstChild, minute);
+  setImgNumber(minuteUpperAnimate.firstChild, minute);
+  setImgNumber(minuteLowerAnimate.firstChild, minute);
+  // 秒钟面板
+  setImgNumber(secondUpper.firstChild, second);
+  setImgNumber(secondLower.firstChild, second);
+  setImgNumber(secondUpperAnimate.firstChild, second);
+  setImgNumber(secondLowerAnimate.firstChild, second);
+}
+
+// 初始化计时器
 function initialize() {
   minute = parseInt(minuteInput.value);
   second = parseInt(secondInput.value);
   rest = parseInt(restInput.value);
 
-  if (restFlag) {   // 如果处于休息状态，就要设置为休息计时
+  // 如果是非工作状态，要执行休息时间
+  if (!shouldWork) {
     minute = rest;
     second = 0;
   }
-
-  setImgNumber(minuteUpper.firstChild, minute);
-  setImgNumber(minuteLower.firstChild, minute);
-  setImgNumber(minuteUpperAnimate.firstChild, minute);
-  setImgNumber(minuteLowerAnimate.firstChild, minute);
-
-  setImgNumber(secondUpper.firstChild, second);
-  setImgNumber(secondLower.firstChild, second);
-  setImgNumber(secondUpperAnimate.firstChild, second);
-  setImgNumber(secondLowerAnimate.firstChild, second);
+  setBoard(minute, second);
 }
 
 // 一次翻牌动画
@@ -117,76 +134,65 @@ function flip(upper, upperAnimate, lower, lowerAnimate, currentValue) {
   upperAnimate.classList.add("upper-animate");
   lowerAnimate.classList.add("lower-animate");
 
-  // 复制的上部牌子结束动作时，要触发的操作
+  // 复制的上部牌子，结束动作时，要触发的操作
   upperAnimate.addEventListener("animationend", function () {
     setImgNumber(upperAnimate.firstChild, nextValue); // 复制的上部动态牌子动画结束时，会回复原位，所以要设置为下一个值
     upperAnimate.classList.remove("upper-animate");   // 移除类名，为下一次动画做准备
   }, false);
 
-  // 复制的下部牌子结束动作时，要触发的操作
+  // 复制的下部牌子，结束动作时，要触发的操作
   lowerAnimate.addEventListener("animationend", function () {
     setImgNumber(lower.firstChild, nextValue);  // 复制的下部动态牌子动画结束时，会回复原位，露出下部牌子，所以下部牌子要设为下一个值
     lowerAnimate.classList.remove("lower-animate");   // 移除类名，为下一次动画做准备
   }, false);
 }
 
-// 启动计时器的函数
-// 要利用系统时间，而不是直接使用 setInterval 计数
-// 这样才能避免计时误差的累积
-function startTimer() {
-  let totalSeconds = 60 * minute + second;  // 开始计时前，先记录总秒数
-  let start = Date.now();   // 记录开始时的时间戳
-  let dingSound = new Audio("sound/ding-sound.mp3");  // 提示音
-
-  // 设置定时更新计数板
-  let intervalID = setInterval(function () {
-    let duration = Date.now() - start;  // 通过时间戳差值，算出已持续的时间，单位是毫秒
-    leftSeconds = totalSeconds - Math.floor(duration / 1000);   // 剩余的秒数
-    let newMinute = Math.floor(leftSeconds / 60);   // 最新的，应该显示在计数板的分钟数
-    let newSecond = leftSeconds % 60;   // 最新的，应该显示在计数板的秒钟数
-
-    if (leftSeconds >= 0) {   // 还有剩余时间时，才需要更新计数板
-      if (newMinute !== minute) {   // 分钟数有变化才更新计数板
-        flip(minuteUpper, minuteUpperAnimate, minuteLower, minuteLowerAnimate, minute);
-        minute = newMinute;   // 更新分钟值
-      }
-      if (newSecond !== second) {   // 秒钟数有变化才更新计数板
-        flip(secondUpper, secondUpperAnimate, secondLower, secondLowerAnimate, second);
-        second = newSecond;   // 更新秒钟值
-      }
-    }
-
-    // 计时到达终点
-    if (leftSeconds === 0) {
-      dingSound.play();
-      pauseTimer();
-      restFlag = !restFlag;   // 更改休息状态
-    }
-  }, 1000);
-
-  running = !running;
-  startButton.firstChild.innerHTML = "暂停";
-  startButton.lastChild.src = "image/icon/icon-pause.svg"
-
-  return intervalID;  // 返回 intervalID，以便需要时可以清除定时动作
+// 播放/暂停按钮的切换
+function setStartButton(str) {
+  if (str === "play") {
+    startButton.firstChild.innerHTML = "开始";
+  } else if (str === "pause") {
+    startButton.firstChild.innerHTML = "暂停";
+  }
+  startButton.lastChild.src = `image/icon/icon-${str}.svg`;
 }
 
-// 暂停计时器的函数
-function pauseTimer() {
-  clearInterval(intervalID);
-  running = !running;
-  startButton.firstChild.innerHTML = "开始";
-  startButton.lastChild.src = "image/icon/icon-play.svg"
+// 启动计时器
+function startTimer() {
+  // 设置定时更新计数板
+  adjustingInterval(function () {
+    if (minute > 0 || second > 0) {   // 还有剩余时间时，才需要更新计数板
+      if (minute > 0 && second === 0) { // 这种情况需要更新分钟
+        flip(minuteUpper, minuteUpperAnimate, minuteLower, minuteLowerAnimate, minute);
+        minute--;
+      }
+      // 秒钟肯定需要更新
+      flip(secondUpper, secondUpperAnimate, secondLower, secondLowerAnimate, second);
+      if (second > 0) {
+        second--;
+      } else if (second === 0) {
+        second = 59;
+      }
+    } else {  // 如果分钟秒钟都为 0，说明到达计时终点
+      clearTimeout(timeoutID);  // 取消定时执行
+      let dingSound = new Audio("sound/ding-sound.mp3");  // 提示音
+      dingSound.play();   // 播放提示音
+      shouldWork = !shouldWork;   // 更改工作状态
+      setStartButton("play");     // 按钮切换到播放
+    }
+  }, 1000);
 }
 
 // 重置为默认值
-function resetValue() {
-  pauseTimer();
+function resetTimer() {
+  clearTimeout(timeoutID);  // 取消定时执行
   minuteInput.value = 25;
   secondInput.value = 0;
   restInput.value = 5;
+  timeoutID = undefined;
+  shouldWork = true;
   initialize();
-  leftSeconds = 0;
+  setStartButton("play");
 }
 
 /* --------------- 主程序 --------------- */
@@ -196,20 +202,22 @@ initialize();
 
 // 开始与暂停
 startButton.addEventListener("click", function () {
-  if (!running) {
-    if (leftSeconds === 0) {
-      // 只有剩余秒数不大于 0，才需要初始化。如果大于0，说明处于暂停状态
+  if (startButton.firstChild.innerHTML === "开始") {
+    // 【计时结束】或【重置】后，计时前需要先初始化
+    if (minute === 0 && second === 0 || timeoutID === undefined) {
       initialize();
     }
-    intervalID = startTimer();
+    startTimer();   // 开始计时
+    setStartButton("pause");  // 按钮切换到暂停
   } else {
-    pauseTimer();
+    clearTimeout(timeoutID);  // 取消定时执行
+    setStartButton("play");   // 按钮切换到播放
   }
 });
 
 // 重置按钮
 resetButton.addEventListener("click", function () {
-  resetValue();
+  resetTimer();
 })
 
 // 全屏按钮
