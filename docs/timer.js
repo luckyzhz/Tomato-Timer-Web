@@ -162,7 +162,7 @@ function startTimer() {
       pauseTimer();
       restFlag = !restFlag;   // 更改休息状态
     }
-  }, 500);
+  }, 1000);
 
   running = !running;
   startButton.firstChild.innerHTML = "暂停";

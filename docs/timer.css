@@ -179,7 +179,7 @@ button img {
 
 .upper-animate, .lower-animate {
   /* 动画时间 */
-  animation-duration: 0.6s;
+  animation-duration: 0.5s;
   /* 匀速动画 */
   animation-timing-function: linear;
   /* 背部不可见 */
