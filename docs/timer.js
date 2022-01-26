@@ -6,6 +6,7 @@
 let intervalID;     // 存放 setInterval 的返回值，以便清除定时动作
 let running = false; // 记录是否处于运行状态
 let leftSeconds = 0;  // 剩余的秒数
+let restFlag = false; // 记录是否处于休息状态
 
 // 获取用户设置的参数
 let minuteInput = document.querySelector("#parameter-minute");
@@ -81,6 +82,11 @@ function initialize() {
   second = parseInt(secondInput.value);
   rest = parseInt(restInput.value);
 
+  if (restFlag) {   // 如果处于休息状态，就要设置为休息计时
+    minute = rest;
+    second = 0;
+  }
+
   setImgNumber(minuteUpper.firstChild, minute);
   setImgNumber(minuteLower.firstChild, minute);
   setImgNumber(minuteUpperAnimate.firstChild, minute);
@@ -154,6 +160,7 @@ function startTimer() {
     if (leftSeconds === 0) {
       dingSound.play();
       pauseTimer();
+      restFlag = !restFlag;   // 更改休息状态
     }
   }, 1000);
 
