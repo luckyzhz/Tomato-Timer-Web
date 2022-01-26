@@ -2,6 +2,10 @@
 
 /* --------------- 变量声明 --------------- */
 
+// 需要用到的全局变量
+let intervalID;     // 存放 setInterval 的返回值，以便清除定时动作
+
+
 // 获取用户设置的参数
 let minute = parseInt(document.querySelector("#parameter-minute").value);
 let second = parseInt(document.querySelector("#parameter-second").value);
@@ -113,38 +117,43 @@ function flip(upper, upperAnimate, lower, lowerAnimate, currentValue) {
   }, false);
 }
 
-function updateTimer() {
-  let totalSeconds = 60 * minute + second;
-  let start = Date.now();
+// 启动计时器的函数
+// 要利用系统时间，而不是直接使用 setInterval 计数
+// 这样才能避免计时误差的累积
+function startTimer() {
+  let totalSeconds = 60 * minute + second;  // 开始计时前，先记录总秒数
+  let start = Date.now();   // 记录开始时的时间戳
 
-  setInterval(function () {
-    let duration = Date.now() - start;
-    let leftSeconds = totalSeconds - Math.floor(duration / 1000);
-    let newMinute = Math.floor(leftSeconds / 60);
-    let newSecond = leftSeconds % 60;
+  // 设置定时更新计数板
+  let intervalID = setInterval(function () {
+    let duration = Date.now() - start;  // 通过时间戳差值，算出已持续的时间，单位是毫秒
+    let leftSeconds = totalSeconds - Math.floor(duration / 1000);   // 剩余的秒数
+    let newMinute = Math.floor(leftSeconds / 60);   // 最新的，应该显示在计数板的分钟数
+    let newSecond = leftSeconds % 60;   // 最新的，应该显示在计数板的秒钟数
 
-    if (leftSeconds >= 0) {
-      if (newMinute !== minute) {
+    if (leftSeconds >= 0) {   // 还有剩余时间时，才需要更新计数板
+      if (newMinute !== minute) {   // 分钟数有变化才更新计数板
         flip(minuteUpper, minuteUpperAnimate, minuteLower, minuteLowerAnimate, minute);
-        minute = newMinute;
+        minute = newMinute;   // 更新分钟值
       }
-      if (newSecond !== second) {
+      if (newSecond !== second) {   // 秒钟数有变化才更新计数板
         flip(secondUpper, secondUpperAnimate, secondLower, secondLowerAnimate, second);
-        second = newSecond;
+        second = newSecond;   // 更新秒钟值
       }
     }
   }, 1000);
+
+  return intervalID;  // 返回 intervalID，以便需要时可以清除定时动作
 }
 
 /* --------------- 主程序 --------------- */
 
 // 初始化
 initialize();
-updateTimer();
-// window.requestAnimationFrame(updateTimer);
-// setInterval(updateTimer, 1000);
 
+startButton.addEventListener("click", function () {
+  intervalID = startTimer();
+});
 
-// flip(minuteUpper, minuteUpperAnimate, minuteLower, minuteLowerAnimate, 25);
 
 
