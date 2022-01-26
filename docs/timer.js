@@ -179,6 +179,7 @@ function resetValue() {
   secondInput.value = 0;
   restInput.value = 5;
   initialize();
+  leftSeconds = 0;
 }
 
 /* --------------- 主程序 --------------- */

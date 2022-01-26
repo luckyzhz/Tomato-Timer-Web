@@ -20,6 +20,7 @@ body {
   text-align: center;
   /* 弹性盒子布局 */
   display: flex;
+  flex-wrap: wrap;
   /* 水平等距分布 */
   justify-content: space-evenly;
   /* 行内垂直对齐 */
