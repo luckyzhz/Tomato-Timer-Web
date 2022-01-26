@@ -21,6 +21,8 @@ body {
   /* 弹性盒子布局 */
   display: flex;
   flex-wrap: wrap;
+  /* 多行垂直等距分布 */
+  align-content: space-evenly;
   /* 水平等距分布 */
   justify-content: space-evenly;
   /* 行内垂直对齐 */
@@ -120,12 +122,17 @@ button img {
   height: 100%;
 }
 
-/* 分钟框，秒钟框，设为正方形 */
+/* 分钟框，秒钟框，利用伪元素撑起为正方形 */
 #minute, #second {
   position: relative;
   width: calc(200 / 480 * 100%);
-  height: calc(200 / 270 * 100%);
   margin: calc(5 / 480 * 100%);
+}
+
+#minute::after, #second::after {
+  content: "";
+  display: block;
+  margin-top: 100%;
 }
 
 /* 上部、下部计数板，各占据半个正方形 */
@@ -220,5 +227,18 @@ button img {
 
   to {
     transform: rotateX(0deg);
+  }
+}
+
+/* ------------ 竖屏时的样式 ------------ */
+
+@media (orientation: portrait) {
+  #control {
+    width: 95%;
+    height: 18rem;
+  }
+
+  #timer {
+    width: 95%;
   }
 }
