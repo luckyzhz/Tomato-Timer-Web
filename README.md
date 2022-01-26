@@ -8,7 +8,7 @@
 
 <https://luckyzhz.github.io/Tomato-Timer-Web/>
 
-![timer-demo](../Tomato-Timer-Web/reference/timer-demo.gif)
+![timer-demo](reference/timer-demo.gif)
 
 ## 项目特点
 
