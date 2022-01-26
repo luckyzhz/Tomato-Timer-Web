@@ -166,22 +166,27 @@ button img {
 
 /* ------------ 动画 ------------ */
 
-/* 上部牌子从上部翻到中间的动画 */
-.upper-animate {
+/* 思路是，复制上部牌子与下部牌子，合成动态翻转的牌子。
+一开始，复制的下部牌子要翻转到上部，并被复制的上部牌子盖住 */
+
+.upper-animate, .lower-animate {
   /* 动画时间 */
-  animation-duration: 0.8s;
-  /* 动画名（后面需要自定义这个动画名的动作） */
-  animation-name: upper-to-middle;
-  /* 转动轴 */
-  transform-origin: bottom;
+  animation-duration: 0.6s;
   /* 匀速动画 */
   animation-timing-function: linear;
-  /* 排列在其他元素之上 */
-  /* z-index: 2; */
+  /* 背部不可见 */
   backface-visibility: hidden;
 }
 
-@keyframes upper-to-middle {
+/* 复制的上部牌子，翻到下部 */
+.upper-animate {
+  /* 动画名（后面需要自定义这个动画名的动作） */
+  animation-name: upper-to-lower;
+  /* 转动轴 */
+  transform-origin: bottom;
+}
+
+@keyframes upper-to-lower {
   from {
     transform: rotateX(0deg);
   }
@@ -191,22 +196,23 @@ button img {
   }
 }
 
-/* 下部牌子从中间翻到下部的动画 */
-.lower-animate {
-  /* 动画时间 */
-  animation-duration: 0.8s;
-  /* 动画名（后面需要自定义这个动画名的动作） */
-  animation-name: middle-to-lower;
+/* 复制的下部牌子，的初始位置 */
+.lower-animate-initial {
   /* 转动轴 */
   transform-origin: top;
-  /* 匀速动画 */
-  animation-timing-function: linear;
-  /* 排列在其他元素之上 */
-  /* z-index: 1; */
-  backface-visibility: hidden;
+  transform: rotateX(-180deg);
+  z-index: 1;
 }
 
-@keyframes middle-to-lower {
+/* 复制的下部牌子，翻到下部 */
+.lower-animate {
+  /* 动画名（后面需要自定义这个动画名的动作） */
+  animation-name: lower-to-lower;
+  /* 转动轴 */
+  transform-origin: top;
+}
+
+@keyframes lower-to-lower {
   from {
     transform: rotateX(-180deg);
   }
@@ -214,12 +220,4 @@ button img {
   to {
     transform: rotateX(0deg);
   }
-}
-
-/* 下部动态牌子的初始位置 */
-.lower-animate-initial {
-  /* 转动轴 */
-  transform-origin: top;
-  transform: rotateX(-180deg);
-  z-index: 1;
 }
