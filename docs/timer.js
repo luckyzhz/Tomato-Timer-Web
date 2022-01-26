@@ -96,24 +96,20 @@ function flip(upper, upperAnimate, lower, lowerAnimate, currentValue) {
   setImgNumber(lower.firstChild, currentValue);
   setImgNumber(lowerAnimate.firstChild, nextValue);
 
-  // 上部动态牌子开始动
+  // 动态牌子开始动
   upperAnimate.classList.add("upper-animate");
   lowerAnimate.classList.add("lower-animate");
 
-  // 上部动画结束时，要触发的操作
+  // 复制的上部牌子结束动作时，要触发的操作
   upperAnimate.addEventListener("animationend", function () {
-    setImgNumber(upperAnimate.firstChild, nextValue); // 上部动态牌子动画结束时，会回复原位，所以要设置为下一个值
+    setImgNumber(upperAnimate.firstChild, nextValue); // 复制的上部动态牌子动画结束时，会回复原位，所以要设置为下一个值
     upperAnimate.classList.remove("upper-animate");   // 移除类名，为下一次动画做准备
-    // setImgNumber(lowerAnimate.firstChild, nextValue); // 下部动态牌子动之前，先设为下一个值
-    // lowerAnimate.classList.add("middle");
-    // lowerAnimate.classList.add("lower-animate");      // 触发下部动画
   }, false);
 
-  // 下部动画结束时，要触发的操作
+  // 复制的下部牌子结束动作时，要触发的操作
   lowerAnimate.addEventListener("animationend", function () {
-    setImgNumber(lower.firstChild, nextValue);        // 下部静态牌子设为下一个值，为下一次动画做准备
+    setImgNumber(lower.firstChild, nextValue);  // 复制的下部动态牌子动画结束时，会回复原位，露出下部牌子，所以下部牌子要设为下一个值
     lowerAnimate.classList.remove("lower-animate");   // 移除类名，为下一次动画做准备
-    // lowerAnimate.classList.remove("middle");
   }, false);
 }
 
