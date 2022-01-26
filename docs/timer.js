@@ -215,6 +215,6 @@ resetButton.addEventListener("click", function () {
 // 全屏按钮
 fullScreenButton.addEventListener("click", function () {
   document.querySelector("#timer").requestFullscreen();
-  screen.orientation.lock("landscape");
+  screen.orientation.lock("landscape");   // 全屏时，横向显示
 });
 
