@@ -60,12 +60,13 @@ function adjustingInterval(func, interval) {  // 传入函数和执行间隔
   }
 }
 
+// Data URL 可以用普通文本，不一定要用 base64
 // 字符串转 base64 的函数
-function b64EncodeUnicode(str) {
-  return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (match, p1) {
-    return String.fromCharCode('0x' + p1);
-  }));
-}
+// function b64EncodeUnicode(str) {
+//   return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (match, p1) {
+//     return String.fromCharCode('0x' + p1);
+//   }));
+// }
 
 // 设置 svg 图片数字的函数
 function setImgNumber(img, number) {
@@ -83,8 +84,8 @@ function setImgNumber(img, number) {
   </defs>
   <title>未标题-2</title><text class="cls-1" transform="translate(125.82 486.37) scale(0.5 1)">${number.toString().padStart(2, '0')}</text>
 </svg>`;
-  let svgBase64 = b64EncodeUnicode(svgString);
-  img.src = "data:image/svg+xml;base64," + svgBase64;
+  let svgURL = encodeURIComponent(svgString);
+  img.src = "data:image/svg+xml," + svgURL;
 }
 
 // 设置面板数字
