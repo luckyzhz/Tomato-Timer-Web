@@ -50,6 +50,8 @@ function adjustingInterval(func, interval) {  // 传入函数和执行间隔
 
 1. 在 Firefox 中，动画抖动，无法显示出翻牌效果。
 2. 如果切换到后台太久，再切回前台，可能每秒钟前后两次计数板更新交织在一起，从而翻牌效果错乱。
+   * Windows 10 Chrome 浏览器环境下，一般几秒后会自行调整回来。
+   * Android 11 Chrome 浏览器环境下，观察较久，未发现会自行调整回来。
 
 ## TODO
 
