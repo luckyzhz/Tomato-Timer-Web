@@ -42,7 +42,7 @@ function adjustingInterval(func, interval) {  // 传入函数和执行间隔
 }
 ```
 
-上面是 `timer.js` 里我们自己定义的，会自动调整执行间隔的定时器。下图是去执行周期图解：
+上面是 `timer.js` 里我们自己定义的，会自动调整执行间隔的定时器。下图是其执行周期图解：
 
 ![自调整定时器周期图解](reference/adjustingInterval-图解.svg)
 
