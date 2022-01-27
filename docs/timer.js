@@ -60,7 +60,7 @@ function adjustingInterval(func, interval) {  // 传入函数和执行间隔
   }
 }
 
-// Data URL 可以用普通文本，不一定要用 base64
+// Data URL 可以用普通文本（要先转成 URL），不一定要用 base64
 // 字符串转 base64 的函数
 // function b64EncodeUnicode(str) {
 //   return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (match, p1) {
