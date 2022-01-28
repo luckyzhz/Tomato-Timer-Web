@@ -118,17 +118,16 @@ function initialize() {
 
 // 一次翻牌动画
 function flip(upper, upperAnimate, lower, lowerAnimate, currentValue) {
-  let nextValue = 0;
-  if (currentValue > 0) {
-    nextValue = currentValue - 1;
-  } else {
+  let nextValue = currentValue - 1;
+  if (currentValue === 0) {
     nextValue = 59;
   }
 
   // 设置四部分牌子的初始值
+  // （翻牌开始前，四块牌子都处于当前值。所以需要当前值的牌子不需要设置）
   setImgNumber(upper.firstChild, nextValue);
-  setImgNumber(upperAnimate.firstChild, currentValue);
-  setImgNumber(lower.firstChild, currentValue);
+  // setImgNumber(upperAnimate.firstChild, currentValue);
+  // setImgNumber(lower.firstChild, currentValue);
   setImgNumber(lowerAnimate.firstChild, nextValue);
 
   // 动态牌子开始动
@@ -136,15 +135,12 @@ function flip(upper, upperAnimate, lower, lowerAnimate, currentValue) {
   lowerAnimate.classList.add("lower-animate");
 
   // 复制的上部牌子，结束动作时，要触发的操作
+  // （也是复制的下部牌子，结束动作时。因为两块牌子是合在一起动的）
   upperAnimate.addEventListener("animationend", function () {
     setImgNumber(upperAnimate.firstChild, nextValue); // 复制的上部动态牌子动画结束时，会回复原位，所以要设置为下一个值
-    upperAnimate.classList.remove("upper-animate");   // 移除类名，为下一次动画做准备
-  }, false);
-
-  // 复制的下部牌子，结束动作时，要触发的操作
-  lowerAnimate.addEventListener("animationend", function () {
+    upperAnimate.classList.remove("upper-animate");   // 复制的上部动态牌子移除类名，为下一次动画做准备
     setImgNumber(lower.firstChild, nextValue);  // 复制的下部动态牌子动画结束时，会回复原位，露出下部牌子，所以下部牌子要设为下一个值
-    lowerAnimate.classList.remove("lower-animate");   // 移除类名，为下一次动画做准备
+    lowerAnimate.classList.remove("lower-animate");   // 复制的下部动态牌子移除类名，为下一次动画做准备
   }, false);
 }
 
