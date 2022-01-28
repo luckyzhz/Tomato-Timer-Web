@@ -170,12 +170,14 @@ function startTimer() {
       } else if (second === 0) {
         second = 59;
       }
-    } else {  // 如果分钟秒钟都为 0，说明到达计时终点
-      clearTimeout(timeoutID);  // 取消定时执行
-      let dingSound = new Audio("sound/ding-sound.mp3");  // 提示音
-      dingSound.play();   // 播放提示音
-      shouldWork = !shouldWork;   // 更改工作状态
-      setStartButton("play");     // 按钮切换到播放
+
+      if (minute === 0 && second === 0) { // 更新后，如果分钟秒钟都为 0，说明到达计时终点
+        clearTimeout(timeoutID);  // 取消定时执行
+        let dingSound = new Audio("sound/ding-sound.mp3");  // 提示音
+        dingSound.play();   // 播放提示音
+        shouldWork = !shouldWork;   // 更改工作状态
+        setStartButton("play");     // 按钮切换到播放
+      }
     }
   }, 1000);
 }
