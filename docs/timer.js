@@ -154,32 +154,25 @@ function setStartButton(str) {
   startButton.lastChild.src = `image/icon/icon-${str}.svg`;
 }
 
-// 启动计时器
-function startTimer() {
-  // 设置定时更新计数板
-  adjustingInterval(function () {
-    if (minute > 0 || second > 0) {   // 还有剩余时间时，才需要更新计数板
-      if (minute > 0 && second === 0) { // 这种情况需要更新分钟
-        flip(minuteUpper, minuteUpperAnimate, minuteLower, minuteLowerAnimate, minute);
-        minute--;
-      }
-      // 秒钟肯定需要更新
-      flip(secondUpper, secondUpperAnimate, secondLower, secondLowerAnimate, second);
-      if (second > 0) {
-        second--;
-      } else if (second === 0) {
-        second = 59;
-      }
-
-      if (minute === 0 && second === 0) { // 更新后，如果分钟秒钟都为 0，说明到达计时终点
-        clearTimeout(timeoutID);  // 取消定时执行
-        let dingSound = new Audio("sound/ding-sound.mp3");  // 提示音
-        dingSound.play();   // 播放提示音
-        shouldWork = !shouldWork;   // 更改工作状态
-        setStartButton("play");     // 按钮切换到播放
-      }
-    }
-  }, 1000);
+// 去往下一秒
+function toNextSecond() {
+  if (second > 0) { // 秒钟大于 0，则只需要更新秒钟
+    flip(secondUpper, secondUpperAnimate, secondLower, secondLowerAnimate, second);
+    second--;
+  } else if (minute > 0) {  // 否则，秒钟为 0，需要分钟大于 0 才需要更新
+    flip(minuteUpper, minuteUpperAnimate, minuteLower, minuteLowerAnimate, minute);
+    minute--;
+    flip(secondUpper, secondUpperAnimate, secondLower, secondLowerAnimate, second);
+    second = 59;
+  }
+  // 更新后，如果分钟秒钟都为 0，说明到达计时终点
+  if (minute === 0 && second === 0) {
+    clearTimeout(timeoutID);  // 取消定时执行
+    let dingSound = new Audio("sound/ding-sound.mp3");  // 提示音
+    dingSound.play();   // 播放提示音
+    shouldWork = !shouldWork;   // 更改工作状态
+    setStartButton("play");     // 按钮切换到播放
+  }
 }
 
 // 重置为默认值
@@ -202,15 +195,18 @@ initialize();
 // 开始与暂停
 startButton.addEventListener("click", function () {
   if (startButton.firstChild.innerHTML === "开始") {
+    setStartButton("pause");  // 按钮切换到暂停
     // 【计时结束】或【重置】后，计时前需要先初始化
     if (minute === 0 && second === 0 || timeoutID === undefined) {
       initialize();
     }
-    startTimer();   // 开始计时
-    setStartButton("pause");  // 按钮切换到暂停
+    // 设置定时去往下一秒
+    adjustingInterval(toNextSecond, 1000);
+    // 一开始就要去往下一秒
+    toNextSecond(); // 注意一开始的更新要放在定时器之后，因为有可能一开始是 0 分 1 秒
   } else {
-    clearTimeout(timeoutID);  // 取消定时执行
     setStartButton("play");   // 按钮切换到播放
+    clearTimeout(timeoutID);  // 取消定时执行
   }
 });
 
