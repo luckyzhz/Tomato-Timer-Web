@@ -204,7 +204,7 @@ button img {
 /* 动画效果 */
 /* 注意不能直接定义在 .animate-box，否则回复原位也会有过渡效果 */
 .animate {
-  transition: transform 0.8s;
+  transition: transform 0.5s linear;
   transform: rotateX(-180deg);
 }
 
