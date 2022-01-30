@@ -127,6 +127,8 @@ button img {
   position: relative;
   width: calc(200 / 480 * 100%);
   margin: calc(5 / 480 * 100%);
+  /* perspective 定义观察者与 z=0 平面的距离，使具有三维位置变换的元素产生透视效果 */
+  perspective: 400vw;
 }
 
 #minute::after, #second::after {
@@ -177,57 +179,33 @@ button img {
 /* 思路是，复制上部牌子与下部牌子，合成动态翻转的牌子。
 一开始，复制的下部牌子要翻转到上部，并被复制的上部牌子盖住 */
 
-.upper-animate, .lower-animate {
-  /* 动画时间 */
-  animation-duration: 0.5s;
-  /* 匀速动画 */
-  animation-timing-function: linear;
-  /* 背部不可见 */
+.animate-box {
+  position: absolute;
+  width: 100%;
+  height: 50%;
+  top: 0;
+  /* 转动轴 */
+  transform-origin: bottom;
+  /* 在空间中变形，从而背面可见 */
+  transform-style: preserve-3d;
+}
+
+.animate-box>* {
+  height: 100%;
   backface-visibility: hidden;
 }
 
-/* 复制的上部牌子，翻到下部 */
-.upper-animate {
-  /* 动画名（后面需要自定义这个动画名的动作） */
-  animation-name: upper-to-lower;
-  /* 转动轴 */
-  transform-origin: bottom;
+.animate-box>.lower {
+  transform-origin: center;
+  /* 一开始要翻到背面，和 upper 合成一张牌的正反面 */
+  transform: rotateX(180deg);
 }
 
-@keyframes upper-to-lower {
-  from {
-    transform: rotateX(0deg);
-  }
-
-  to {
-    transform: rotateX(180deg);
-  }
-}
-
-/* 复制的下部牌子，的初始位置 */
-.lower-animate-initial {
-  /* 转动轴 */
-  transform-origin: top;
+/* 动画效果 */
+/* 注意不能直接定义在 .animate-box，否则回复原位也会有过渡效果 */
+.animate {
+  transition: transform 0.8s;
   transform: rotateX(-180deg);
-  z-index: 1;
-}
-
-/* 复制的下部牌子，翻到下部 */
-.lower-animate {
-  /* 动画名（后面需要自定义这个动画名的动作） */
-  animation-name: lower-to-lower;
-  /* 转动轴 */
-  transform-origin: top;
-}
-
-@keyframes lower-to-lower {
-  from {
-    transform: rotateX(-180deg);
-  }
-
-  to {
-    transform: rotateX(0deg);
-  }
 }
 
 /* ------------ 竖屏时的样式 ------------ */

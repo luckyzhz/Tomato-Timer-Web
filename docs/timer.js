@@ -15,30 +15,26 @@ let secondInput = document.querySelector("#parameter-second");
 let restInput = document.querySelector("#parameter-rest");
 
 // 获取动态变化的元素
-let minuteBox = document.querySelector("#minute");
 let minuteUpper = document.querySelector("#minute>.upper");
 let minuteLower = document.querySelector("#minute>.lower");
+let minuteAnimateBox = document.querySelector("#minute>.animate-box");
 
-let secondBox = document.querySelector("#second");
 let secondUpper = document.querySelector("#second>.upper");
 let secondLower = document.querySelector("#second>.lower");
+let secondAnimateBox = document.querySelector("#second>.animate-box");
 
-// 复制生成动态翻页的节点，并附加到文档
+// 复制生成动态翻页的节点，并附加到动画框
 let minuteUpperAnimate = minuteUpper.cloneNode(true);
-minuteBox.appendChild(minuteUpperAnimate);
-minuteUpperAnimate.style["z-index"] = 2;
+minuteAnimateBox.appendChild(minuteUpperAnimate);
 
 let minuteLowerAnimate = minuteLower.cloneNode(true);
-minuteBox.appendChild(minuteLowerAnimate);
-minuteLowerAnimate.classList.add("lower-animate-initial");   // 上翻，并被另一个动态页盖住
+minuteAnimateBox.appendChild(minuteLowerAnimate);
 
 let secondUpperAnimate = secondUpper.cloneNode(true);
-secondBox.appendChild(secondUpperAnimate);
-secondUpperAnimate.style["z-index"] = 2;
+secondAnimateBox.appendChild(secondUpperAnimate);
 
 let secondLowerAnimate = secondLower.cloneNode(true);
-secondBox.appendChild(secondLowerAnimate);
-secondLowerAnimate.classList.add("lower-animate-initial");   // 上翻，并被另一个动态页盖住
+secondAnimateBox.appendChild(secondLowerAnimate);
 
 // 获取按钮
 let startButton = document.querySelector("button#start");
@@ -117,7 +113,7 @@ function initialize() {
 }
 
 // 一次翻牌动画
-function flip(upper, upperAnimate, lower, lowerAnimate, currentValue) {
+function flip(animateBox, upper, upperAnimate, lower, lowerAnimate, currentValue) {
   let nextValue = currentValue - 1;
   if (currentValue === 0) {
     nextValue = 59;
@@ -130,17 +126,16 @@ function flip(upper, upperAnimate, lower, lowerAnimate, currentValue) {
   // setImgNumber(lower.firstChild, currentValue);
   setImgNumber(lowerAnimate.firstChild, nextValue);
 
-  // 动态牌子开始动
-  upperAnimate.classList.add("upper-animate");
-  lowerAnimate.classList.add("lower-animate");
+  // 动画框开始动
+  animateBox.classList.add("animate");
 
-  // 复制的上部牌子，结束动作时，要触发的操作
-  // （也是复制的下部牌子，结束动作时。因为两块牌子是合在一起动的）
-  upperAnimate.addEventListener("animationend", function () {
-    setImgNumber(upperAnimate.firstChild, nextValue); // 复制的上部动态牌子动画结束时，会回复原位，所以要设置为下一个值
-    upperAnimate.classList.remove("upper-animate");   // 复制的上部动态牌子移除类名，为下一次动画做准备
-    setImgNumber(lower.firstChild, nextValue);  // 复制的下部动态牌子动画结束时，会回复原位，露出下部牌子，所以下部牌子要设为下一个值
-    lowerAnimate.classList.remove("lower-animate");   // 复制的下部动态牌子移除类名，为下一次动画做准备
+  // 动画框结束动作时，要触发的操作
+  animateBox.addEventListener("transitionend", function () {
+    // 动画结束时，会回复原位，所以要设置为下一个值
+    setImgNumber(upperAnimate.firstChild, nextValue);
+    setImgNumber(lower.firstChild, nextValue);
+    // 动画框移除类名，为下一次动画做准备
+    animateBox.classList.remove("animate");
   }, false);
 }
 
@@ -157,12 +152,12 @@ function setStartButton(str) {
 // 去往下一秒
 function toNextSecond() {
   if (second > 0) { // 秒钟大于 0，则只需要更新秒钟
-    flip(secondUpper, secondUpperAnimate, secondLower, secondLowerAnimate, second);
+    flip(secondAnimateBox, secondUpper, secondUpperAnimate, secondLower, secondLowerAnimate, second);
     second--;
   } else if (minute > 0) {  // 否则，秒钟为 0，需要分钟大于 0 才需要更新
-    flip(minuteUpper, minuteUpperAnimate, minuteLower, minuteLowerAnimate, minute);
+    flip(minuteAnimateBox, minuteUpper, minuteUpperAnimate, minuteLower, minuteLowerAnimate, minute);
     minute--;
-    flip(secondUpper, secondUpperAnimate, secondLower, secondLowerAnimate, second);
+    flip(secondAnimateBox, secondUpper, secondUpperAnimate, secondLower, secondLowerAnimate, second);
     second = 59;
   }
   // 更新后，如果分钟秒钟都为 0，说明到达计时终点
