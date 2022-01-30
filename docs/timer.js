@@ -8,6 +8,7 @@ let shouldWork = true;  // 默认处于工作状态
 let minute = 0; // 当前分钟数
 let second = 0; // 当前秒钟数
 let rest = 0;   // 休息分钟数
+let dingSound = new Audio("sound/ding-sound.mp3");  // 提示音。一开始先下载好，需要时可直接播放
 
 // 输入框
 let minuteInput = document.querySelector("#parameter-minute");
@@ -163,7 +164,6 @@ function toNextSecond() {
   // 更新后，如果分钟秒钟都为 0，说明到达计时终点
   if (minute === 0 && second === 0) {
     clearTimeout(timeoutID);  // 取消定时执行
-    let dingSound = new Audio("sound/ding-sound.mp3");  // 提示音
     dingSound.play();   // 播放提示音
     shouldWork = !shouldWork;   // 更改工作状态
     setStartButton("play");     // 按钮切换到播放
